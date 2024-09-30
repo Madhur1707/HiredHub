@@ -1,0 +1,34 @@
+[
+    {
+        "question": "How do I search for jobs?",
+        "answer": "To search for jobs, click on the 'Find Jobs' button on the homepage or navigate to the Jobs section using the top menu. You can filter jobs by location, job title, company, and other criteria."
+    },
+    {
+        "question": "How do I apply for a job?",
+        "answer": "Once you find a job you're interested in, click on the job title to view the job details. From there, click the 'Apply Now' button and follow the instructions to submit your application."
+    },
+    {
+        "question": "Can I track my job applications?",
+        "answer": "Yes, once you apply for a job, you can track your application status under your account dashboard. You will also receive updates via email."
+    },
+    {
+        "question": "How do I post a job as an employer?",
+        "answer": "As an employer, click on the 'Post a Job' button on the homepage or use the top menu to navigate to the 'Post a Job' section. Fill in the job details, and your job listing will be live once submitted."
+    },
+    {
+        "question": "Is there a fee for posting jobs?",
+        "answer": "We offer both free and premium plans for posting jobs. The free plan allows you to post a limited number of job listings, while premium plans offer more features, including featured listings and better candidate visibility."
+    },
+    {
+        "question": "How do I manage applications as an employer?",
+        "answer": "Once a job is posted, you can manage applications from your employer dashboard. View candidate profiles, track their application status, and contact them directly."
+    },
+    {
+        "question": "How can I contact support?",
+        "answer": "If you have any issues or questions, you can contact our support team by emailing support@jobportal.com or using the contact form on our website."
+    },
+    {
+        "question": "Do I need to create an account to apply for jobs?",
+        "answer": "Yes, creating an account is necessary to apply for jobs. It helps you track your applications and manage your profile for better visibility to employers."
+    }
+]

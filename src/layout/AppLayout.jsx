@@ -10,7 +10,7 @@ const AppLayout = () => {
         <Header />
         <Outlet />
       </main>
-      <div className="p-10 text-center bg--black mt-10">
+      <div className="p-10 text-center bg--black ">
         Made with 💗 by Madhur Pathak.{" "}
       </div>
     </div>
