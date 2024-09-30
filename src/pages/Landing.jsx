@@ -33,12 +33,12 @@ const LandingPage = () => {
       </section>
       <div className="flex gap-6 justify-center">
         <Link to="/jobs">
-          <Button variant="yellow" size="xl">
+          <Button variant="yellow" size="xl" className="shadow-xl">
             Find Jobs
           </Button>
         </Link>
         <Link to="/post-job">
-          <Button variant="destructive" size="xl">
+          <Button variant="destructive" size="xl" className="shadow-xl">
             Post a Job
           </Button>
         </Link>
@@ -70,7 +70,7 @@ const LandingPage = () => {
       </div>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 content-center justify-center items-center m-5">
-        <Card className=" bg-yellow-500 text-black hover:bg-yellow-600">
+        <Card className=" bg-yellow-500 text-black hover:bg-yellow-600 shadow-xl">
           <CardHeader>
             <CardTitle>For Job Seekers</CardTitle>
           </CardHeader>
@@ -78,7 +78,7 @@ const LandingPage = () => {
             <p>Search and apply for jobs, track application and more.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="shadow-xl">
           <CardHeader>
             <CardTitle>For Employers</CardTitle>
           </CardHeader>
@@ -94,7 +94,7 @@ const LandingPage = () => {
         <Accordion
           type="single"
           collapsible
-          className="col-span-1 md:col-span-2"
+          className="col-span-1 md:col-span-2 font-medium text-lg"
         >
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index + 1}`}>

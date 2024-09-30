@@ -58,7 +58,7 @@
 }
 @layer utilities {
   .gradient {
-    @apply bg-gradient-to-br from-yellow-300 via-yellow-200 to-white;
+    @apply bg-gradient-to-br from-teal-100 via-green-100 to-blue-100;
   }
   .gradient-title {
     @apply gradient text-transparent bg-clip-text;
