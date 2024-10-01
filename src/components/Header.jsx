@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="py-2 flex justify-between items-center ">
+      <nav className="py-2 flex justify-between items-center m-3 ">
         <Link to="/">
           <img src="/logo2.png" alt="Logo" className="h-20 " />
         </Link>
