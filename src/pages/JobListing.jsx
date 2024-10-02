@@ -3,7 +3,6 @@ import { useSession } from "@clerk/clerk-react";
 import { useEffect } from "react";
 
 const JobListing = () => {
-  const { session } = useSession();
 
   const fetchJobs = async () => {
     const supabaseAccessToken = await session.getToken({
