@@ -1,8 +1,18 @@
+import { getCompanies } from "@/api/apiCompanies";
 import { getJobs } from "@/api/apiJobs";
 import JobCard from "@/components/JobCard";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import useFetch from "@/hooks/useFetch";
 import { useUser } from "@clerk/clerk-react";
+import { State } from "country-state-city";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 
@@ -19,7 +29,13 @@ const JobListing = () => {
     loading: loadingJobs,
   } = useFetch(getJobs, { location, searchQuery, company_id });
 
+  const { fn: fnCompanies, data: companies } = useFetch(getCompanies);
+
   console.log(Jobs);
+
+  useEffect(() => {
+    if (isLoaded) fnCompanies();
+  }, [isLoaded]);
 
   useEffect(() => {
     if (isLoaded) fnJobs();
@@ -31,8 +47,13 @@ const JobListing = () => {
 
     const query = formData.get("search-query");
     if (query) setSearchQuery(query);
-    console.log(query);
   };
+
+  const clearFilters = () => {
+    setSearchQuery("")
+    setLocation("")
+    setCompany_id("")
+  }
 
   if (!isLoaded) {
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
@@ -46,7 +67,6 @@ const JobListing = () => {
       {loadingJobs && (
         <BarLoader className="mb-5" width={"100%"} color="#36d7b7" />
       )}
-
       <form
         onSubmit={handleSearch}
         className="h-14 flex flex-row w-full  items-center mb-3"
@@ -55,7 +75,7 @@ const JobListing = () => {
           type="text"
           name="search-query"
           placeholder="Search Jobs by Title"
-          className="h-full flex-1 m-5 px-4 text-black text-center rounded-md"
+          className="h-full flex-1 m-5 px-4 text-black text-lg font-semibold rounded-md"
         />
         <Button
           type="submit"
@@ -66,8 +86,49 @@ const JobListing = () => {
         </Button>
       </form>
 
+      <div className="flex flex-col sm:flex-row gap-2 m-5">
+        <Select value={location} onValueChange={(value) => setLocation(value)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Filter By Location" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {State.getStatesOfCountry("IN").map(({ name }) => {
+                return (
+                  <SelectItem key={name} value={name}>
+                    {name}
+                  </SelectItem>
+                );
+              })}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <Select
+          value={company_id}
+          onValueChange={(value) => setCompany_id(value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Filter By Company" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {companies?.length > 0 ? (
+                companies.map(({ name, id }) => (
+                  <SelectItem key={name} value={id}>
+                    {name}
+                  </SelectItem>
+                ))
+              ) : (
+                <div className="px-4 py-2">No companies available</div>
+              )}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <Button onClick={clearFilters} variant="destructive" className=" sm:w-1/2">Clear Search</Button>
+      </div>
+
       {loadingJobs === false && (
-        <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Jobs?.length ? (
             Jobs.map((job) => {
               return (
@@ -79,7 +140,7 @@ const JobListing = () => {
               );
             })
           ) : (
-            <div>No Jobs Found !!</div>
+            <div className="m-5">No Jobs Found !!</div>
           )}
         </div>
       )}
