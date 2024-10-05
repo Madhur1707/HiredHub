@@ -12,9 +12,12 @@ import {
 } from "@/components/ui/select";
 import useFetch from "@/hooks/useFetch";
 import { useUser } from "@clerk/clerk-react";
-import { State } from "country-state-city";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
+
+// City-based filter
+
+const cities = ["Hyderabad", "Noida", "Gurgaon", "Bengaluru", "Pune"];
 
 const JobListing = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,10 +53,10 @@ const JobListing = () => {
   };
 
   const clearFilters = () => {
-    setSearchQuery("")
-    setLocation("")
-    setCompany_id("")
-  }
+    setSearchQuery("");
+    setLocation("");
+    setCompany_id("");
+  };
 
   if (!isLoaded) {
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
@@ -61,8 +64,8 @@ const JobListing = () => {
 
   return (
     <div>
-      <h1 className="gradient-title font-extrabold text-6xl sm:text-7xl text-center pb-8">
-        Latest Jobs
+      <h1 className="gradient-title font-semibold text-3xl sm:text-7xl text-center pb-8">
+        Latest Jobs 
       </h1>
       {loadingJobs && (
         <BarLoader className="mb-5" width={"100%"} color="#36d7b7" />
@@ -80,7 +83,7 @@ const JobListing = () => {
         <Button
           type="submit"
           variant="yellow"
-          className="h-full text-lg m-5 px-6 sm:w-32 w-40"
+          className="h-full text-lg m-5 px-6 sm:w-32"
         >
           Search
         </Button>
@@ -89,20 +92,19 @@ const JobListing = () => {
       <div className="flex flex-col sm:flex-row gap-2 m-5">
         <Select value={location} onValueChange={(value) => setLocation(value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Filter By Location" />
+            <SelectValue placeholder="Filter By Location (City)" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {State.getStatesOfCountry("IN").map(({ name }) => {
-                return (
-                  <SelectItem key={name} value={name}>
-                    {name}
-                  </SelectItem>
-                );
-              })}
+              {cities.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
+
         <Select
           value={company_id}
           onValueChange={(value) => setCompany_id(value)}
@@ -124,7 +126,13 @@ const JobListing = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Button onClick={clearFilters} variant="destructive" className=" sm:w-1/2">Clear Search</Button>
+        <Button
+          onClick={clearFilters}
+          variant="destructive"
+          className=" sm:w-1/2"
+        >
+          Clear Search
+        </Button>
       </div>
 
       {loadingJobs === false && (
