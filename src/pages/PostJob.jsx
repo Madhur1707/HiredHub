@@ -17,18 +17,22 @@ import { getCompanies } from "@/api/apiCompanies";
 import { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { BarLoader } from "react-spinners";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
+import { Button } from "@/components/ui/button";
+import { addNewJob } from "@/api/apiJobs";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().min(1, { message: "Description is required" }),
   location: z.string().min(1, { message: "Location is required" }),
   company__id: z.string().min(1, { message: "Select or add a new company" }),
-  requierments: z.string().min(1, { message: "Requierments are required" }),
+  requirements: z.string().min(1, { message: "Requirements are required" }),
 });
 
 const PostJob = () => {
   const { isLoaded, user } = useUser();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -54,6 +58,24 @@ const PostJob = () => {
     if (isLoaded) fnCompanies();
   }, [isLoaded]);
 
+  const {
+    loading: loadingCreateJob,
+    error: errorCreateJob,
+    data: dataCreateJob,
+    fn: fnCreateJob,
+  } = useFetch(addNewJob);
+
+  const onSubmit = (data) => {
+    fnCreateJob({
+      ...data,
+      recruiter_id: user.id,
+      isOpen: true,
+    });
+  };
+  useEffect(() => {
+    if (dataCreateJob?.length > 0) navigate("/jobs");
+  }, [loadingCreateJob]);
+
   if (!isLoaded || loadingCompanies) {
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
   }
@@ -67,7 +89,10 @@ const PostJob = () => {
       <h1 className="gradient-title font-semibold text-3xl sm:text-3xl text-center pb-8">
         Post a Job
       </h1>
-      <form className="flex flex-col gap-4 p-4 pb-0">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 p-4 pb-0"
+      >
         <Input placeholder="Job Title" {...register("title")} />
         {errors.title && <p className="text-red-500">{errors.title.message}</p>}
         <Textarea placeholder="Job Description" {...register("description")} />
@@ -95,29 +120,59 @@ const PostJob = () => {
               </Select>
             )}
           />
-
-          <Select
-          // value={company_id}
-          // onValueChange={(value) => setCompany_id(value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Company Name" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {companies?.length > 0 ? (
-                  companies.map(({ name, id }) => (
-                    <SelectItem key={name} value={id}>
-                      {name}
-                    </SelectItem>
-                  ))
-                ) : (
-                  <div className="px-4 py-2">No companies available</div>
-                )}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <Controller
+            name="company_id"
+            control={control}
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Company Name">
+                    {field.value
+                      ? companies?.find((com) => com.id === Number(field.value))
+                          ?.name
+                      : "Company"}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {companies?.length > 0 ? (
+                      companies.map(({ name, id }) => (
+                        <SelectItem key={name} value={id}>
+                          {name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <div className="px-4 py-2">No companies available</div>
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          />
         </div>
+        {errors.location && (
+          <p className="text-red-500">{errors.location.message}</p>
+        )}
+        {errors.company_id && (
+          <p className="text-red-500">{errors.company_id.message}</p>
+        )}
+        <Controller
+          name="requierments"
+          control={control}
+          render={({ field }) => (
+            <MDEditor value={field.value} onChange={field.onChange} />
+          )}
+        />
+        {errors.requierments && (
+          <p className="text-red-500">{errors.requierments.message}</p>
+        )}
+        {errorCreateJob?.message && (
+          <p className="text-red-500"> {errorCreateJob?.message}</p>
+        )}
+        {loadingCreateJob && <BarLoader width={"100%"} color="#36d7b7" />}
+        <Button type="submit" variant="yellow" size="lg" className="mt-2">
+          Submit
+        </Button>
       </form>
     </div>
   );
