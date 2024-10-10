@@ -43,12 +43,11 @@ export async function saveJob(token, { alreadySaved }, saveData) {
     const { data, error: deleteError } = await supabase
       .from("saved_jobs")
       .delete()
-      .eq("job_id", saveData.job_id)
-      .select("*, jobs!saved_jobs_job_id_fkey(*)");
+      .eq("job_id", saveData.job_id);
 
     if (deleteError) {
       console.error("Error removing saved job:", deleteError);
-      return null;
+      return data;
     }
 
     return data;
@@ -57,11 +56,11 @@ export async function saveJob(token, { alreadySaved }, saveData) {
     const { data, error: insertError } = await supabase
       .from("saved_jobs")
       .insert([saveData])
-      .select("*, jobs!saved_jobs_job_id_fkey(*)");
+      .select();
 
     if (insertError) {
       console.error("Error saving job:", insertError);
-      return null;
+      return data;
     }
 
     return data;
