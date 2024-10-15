@@ -65,7 +65,7 @@ const LandingPage = () => {
         </CarouselContent>
       </Carousel>
       <div className="flex w-full justify-center items-center">
-        <img src="/banner2.png" className=" w-1/2 object-fill shadow-md" />
+        <img src="/banner2.png" className=" w-2/3 object-fill shadow-md" />
       </div>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 content-center justify-center items-center m-5">

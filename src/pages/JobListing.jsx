@@ -72,24 +72,24 @@ const JobListing = () => {
       )}
       <form
         onSubmit={handleSearch}
-        className="h-14 flex flex-row w-full  items-center mb-3"
+        className="h-auto flex flex-col sm:flex-row w-full items-center "
       >
         <input
           type="text"
           name="search-query"
           placeholder="Search Jobs by Title"
-          className="h-full flex-1 m-5 px-4 text-black text-lg font-semibold rounded-md"
+          className="h-12 w-full sm:flex-1 m-3 px-4 text-black text-lg font-semibold rounded-md"
         />
         <Button
           type="submit"
           variant="yellow"
-          className="h-full text-lg m-5 px-6 sm:w-32"
+          className="h-14 w-full sm:w-auto sm:h-full text-lg m-3 px-6"
         >
           Search
         </Button>
       </form>
 
-      <div className="flex flex-col sm:flex-row gap-2 m-5">
+      <div className="flex flex-col sm:flex-row gap-2 m-3">
         <Select value={location} onValueChange={(value) => setLocation(value)}>
           <SelectTrigger>
             <SelectValue placeholder="Filter By Location (City)" />
@@ -136,7 +136,7 @@ const JobListing = () => {
       </div>
 
       {loadingJobs === false && (
-        <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="mt-3 grid md:grid-cols-2 lg:grid-cols-3 gap-1">
           {jobs?.length ? (
             jobs.map((job) => {
               return (
@@ -148,7 +148,7 @@ const JobListing = () => {
               );
             })
           ) : (
-            <div>No Jobs Found 😢</div>
+            <div className="flex justify-center items-center">No Jobs Found 😢</div>
           )}
         </div>
       )}
