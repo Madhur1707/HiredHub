@@ -1,8 +1,23 @@
-# React + Vite
+# HiredHub Job Portal Web Application 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### This is a job portal web app where recruiters can post job listings, manage hiring statuses, and view applicants. Candidates can browse available job opportunities and apply directly through the platform.
 
-Currently, two official plugins are available:
+## Features:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### For Recruiters: 
+
+* Job Posting: Create, edit, and delete job listings.
+* Manage Hiring Status: Open or close job postings and update the hiring status for candidates.
+* View Applicants: Check the list of candidates who have applied for each job.
+
+### For Candidates:
+
+*  Browse Jobs: View all available job listings and filter by categories.
+*  Apply for Jobs: Submit applications directly through the platform.
+*  View Job Details: Access detailed descriptions of each job.
+
+## Tech Stack
+
+* Frontend: React, Shadcn UI, TailwindCSS
+* Backend: Supabase (database and backend services)
+* Authentication: Clerk
