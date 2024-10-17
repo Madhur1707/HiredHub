@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { getCompanies } from "@/api/apiCompanies";
 import { getJobs } from "@/api/apiJobs";
 import JobCard from "@/components/JobCard";
@@ -12,10 +13,15 @@ import {
 } from "@/components/ui/select";
 import useFetch from "@/hooks/useFetch";
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
-
-// City-based filter
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 const cities = ["Hyderabad", "Noida", "Gurgaon", "Bengaluru", "Pune"];
 
@@ -23,6 +29,8 @@ const JobListing = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [location, setLocation] = useState("");
   const [company_id, setCompany_id] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const jobsPerPage = 3; // Show 3 jobs per page
 
   const { isLoaded } = useUser();
 
@@ -33,8 +41,6 @@ const JobListing = () => {
   } = useFetch(getJobs, { location, searchQuery, company_id });
 
   const { fn: fnCompanies, data: companies } = useFetch(getCompanies);
-
-  console.log(jobs);
 
   useEffect(() => {
     if (isLoaded) fnCompanies();
@@ -56,7 +62,34 @@ const JobListing = () => {
     setSearchQuery("");
     setLocation("");
     setCompany_id("");
+    setCurrentPage(1);
   };
+
+  const handlePageChange = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      setCurrentPage(1); // Redirect to the first page if on the last page
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Pagination logic
+  const indexOfLastJob = currentPage * jobsPerPage;
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
+  const currentJobs = jobs?.slice(indexOfFirstJob, indexOfLastJob);
+  const totalPages = Math.ceil(jobs?.length / jobsPerPage);
 
   if (!isLoaded) {
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
@@ -137,8 +170,8 @@ const JobListing = () => {
 
       {loadingJobs === false && (
         <div className="mt-3 grid md:grid-cols-2 lg:grid-cols-3 gap-1">
-          {jobs?.length ? (
-            jobs.map((job) => {
+          {currentJobs?.length ? (
+            currentJobs.map((job) => {
               return (
                 <JobCard
                   key={job.id}
@@ -148,9 +181,43 @@ const JobListing = () => {
               );
             })
           ) : (
-            <div className="flex justify-center items-center">No Jobs Found 😢</div>
+            <div className="flex justify-center items-center">
+              No Jobs Found 😢
+            </div>
           )}
         </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+              />
+            </PaginationItem>
+            {[...Array(totalPages).keys()].map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  href="#"
+                  onClick={() => handlePageChange(page + 1)}
+                  active={currentPage === page + 1}
+                >
+                  {page + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={handleNextPage}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       )}
     </div>
   );
