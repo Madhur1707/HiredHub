@@ -11,7 +11,7 @@ const AppLayout = () => {
         <Outlet />
       </main>
       <div className="p-10 m-0 text-center bg--black  ">
-       Hiredhub © 2024-2025, All Rights Reserved.
+       Hiredhub © 2024
       </div>
     </div>
   );
