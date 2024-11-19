@@ -11,7 +11,7 @@ const AppLayout = () => {
         <Outlet />
       </main>
       <div className="p-10 m-0 text-center bg--black  ">
-        Made with 💟 by Madhur Pathak.{" "}
+       Hiredhub © 2024
       </div>
     </div>
   );
