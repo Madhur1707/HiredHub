@@ -30,7 +30,7 @@ const JobListing = () => {
   const [location, setLocation] = useState("");
   const [company_id, setCompany_id] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 3; // Show 3 jobs per page
+  const jobsPerPage = 5;
 
   const { isLoaded } = useUser();
 
@@ -211,10 +211,7 @@ const JobListing = () => {
               </PaginationItem>
             ))}
             <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={handleNextPage}
-              />
+              <PaginationNext href="#" onClick={handleNextPage} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
