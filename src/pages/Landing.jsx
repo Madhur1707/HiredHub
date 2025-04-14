@@ -65,7 +65,11 @@ const LandingPage = () => {
         </CarouselContent>
       </Carousel>
       <div className="flex w-full justify-center items-center">
-        <img src="/banner.png" className=" w-2/3 object-cover" />
+        <img
+          src="/heroimg.png"
+          className="max-w-[700px] w-full h-auto object-cover"
+          alt="Hero"
+        />
       </div>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4 content-center justify-center items-center m-5">
