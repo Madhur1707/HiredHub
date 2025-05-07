@@ -9,6 +9,7 @@ import MyJobs from "./pages/MyJobs";
 import { ThemeProvider } from "./components/theme-provider";
 import ProtectedRoute from "./components/protectedRoutes";
 import JobPage from "./pages/Job";
+import ShortlistAI from "./pages/ShortlistAI";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path:"/shortlist-ai",
+        element:(
+          <ProtectedRoute>
+            <ShortlistAI />
+          </ProtectedRoute>
+        )
+      }
     ],
   },
 ]);
