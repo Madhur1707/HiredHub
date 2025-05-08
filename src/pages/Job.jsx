@@ -4,7 +4,15 @@ import { BarLoader } from "react-spinners";
 import MDEditor from "@uiw/react-md-editor";
 import { Link, useParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
-import { Briefcase, DoorClosed, DoorOpen, MapPinIcon, Users, ChevronRight, MapPin } from "lucide-react";
+import {
+  Briefcase,
+  DoorClosed,
+  DoorOpen,
+  MapPinIcon,
+  Users,
+  ChevronRight,
+  MapPin,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -13,10 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ApplicationCard from "@/components/ApplicationCard";
-import { getSingleJob, updateHiringStatus } from "@/api/apiJobs";
 import useFetch from "@/hooks/useFetch";
 import ApplyJobDrawer from "@/components/ApplyJobs";
 import { Button } from "@/components/ui/button";
+import { getSingleJob, updateHiringStatus } from "@/api/apiJobs";
 
 const JobPage = () => {
   const { id } = useParams();
@@ -59,11 +67,13 @@ const JobPage = () => {
       <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="flex items-center text-sm font-medium text-gray-500 mb-4">
-          <Link to="/jobs" className="hover:text-gray-700">Jobs</Link>
+          <Link to="/jobs" className="hover:text-gray-700">
+            Jobs
+          </Link>
           <ChevronRight className="w-4 h-4 mx-2" />
           <span className="text-gray-900">{job?.title}</span>
         </nav>
-        
+
         {/* Header Card */}
         <div className="bg-white rounded-lg shadow-sm border mb-8">
           <div className="p-6">
@@ -73,29 +83,33 @@ const JobPage = () => {
               </h1>
               {job?.company?.logo_url && (
                 <div className="flex-shrink-0 p-2 bg-black rounded-lg border shadow-sm">
-                  <img src={job?.company?.logo_url} className="h-12" alt={job?.title} />
+                  <img
+                    src={job?.company?.logo_url}
+                    className="h-12"
+                    alt={job?.title}
+                  />
                 </div>
               )}
             </div>
 
             <div className="flex flex-wrap gap-6 text-sm text-gray-500 mb-6">
               <div className="flex items-center">
-                <MapPin className="w-4 h-4 mr-2 text-gray-400" /> 
+                <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                 <span>{job?.location}</span>
               </div>
               <div className="flex items-center">
-                <Users className="w-4 h-4 mr-2 text-gray-400" /> 
+                <Users className="w-4 h-4 mr-2 text-gray-400" />
                 <span>{job?.applications?.length || 0} Applicants</span>
               </div>
               <div className="flex items-center">
                 {job?.isOpen ? (
                   <>
-                    <DoorOpen className="w-4 h-4 mr-2 text-green-500" /> 
+                    <DoorOpen className="w-4 h-4 mr-2 text-green-500" />
                     <span className="text-green-600 font-medium">Open</span>
                   </>
                 ) : (
                   <>
-                    <DoorClosed className="w-4 h-4 mr-2 text-red-500" /> 
+                    <DoorClosed className="w-4 h-4 mr-2 text-red-500" />
                     <span className="text-red-600 font-medium">Closed</span>
                   </>
                 )}
@@ -104,18 +118,21 @@ const JobPage = () => {
 
             {job?.recruiter_id === user?.id && (
               <div className="mb-4">
-                <div className="text-sm font-medium text-gray-700 mb-2">Hiring Status</div>
+                <div className="text-sm font-medium text-gray-700 mb-2">
+                  Hiring Status
+                </div>
                 <Select onValueChange={handleStatusChange}>
                   <SelectTrigger
                     className={`w-full ${
-                      job?.isOpen 
-                        ? "bg-green-50 text-green-700 border-green-200" 
+                      job?.isOpen
+                        ? "bg-green-50 text-green-700 border-green-200"
                         : "bg-red-50 text-red-700 border-red-200"
                     }`}
                   >
                     <SelectValue
                       placeholder={
-                        "Hiring Status " + (job?.isOpen ? "( Open )" : "( Closed )")
+                        "Hiring Status " +
+                        (job?.isOpen ? "( Open )" : "( Closed )")
                       }
                     />
                   </SelectTrigger>
@@ -134,7 +151,9 @@ const JobPage = () => {
                   job={job}
                   user={user}
                   fetchJob={fnJob}
-                  applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
+                  applied={job?.applications?.find(
+                    (ap) => ap.candidate_id === user.id
+                  )}
                 />
               </div>
             )}
@@ -147,12 +166,18 @@ const JobPage = () => {
           <div className="lg:col-span-2">
             <div className="space-y-8">
               <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">About the job</h2>
-                <p className="text-gray-700 leading-relaxed sm:text-lg">{job?.description}</p>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  About the job
+                </h2>
+                <p className="text-gray-700 leading-relaxed sm:text-lg">
+                  {job?.description}
+                </p>
               </div>
 
               <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold text-black mb-4">What we are looking for</h2>
+                <h2 className="text-xl font-semibold text-black mb-4">
+                  What we are looking for
+                </h2>
                 <div className="prose prose-blue max-w-none">
                   <MDEditor.Markdown
                     source={job?.requirements}
@@ -161,60 +186,79 @@ const JobPage = () => {
                 </div>
               </div>
 
-              {loadingHiringStatus && <BarLoader width={"100%"} color="#36d7b7" />}
-              
-              {/* Applications section for recruiters */}
-              {job?.applications?.length > 0 && job?.recruiter_id === user?.id && (
-                <div className="bg-white rounded-lg shadow-sm border p-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-semibold text-gray-900">Applications</h2>
-                    <span className="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                      {job?.applications?.length} total
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {job?.applications.map((application) => {
-                      return (
-                        <ApplicationCard key={application.id} application={application} />
-                      );
-                    })}
-                  </div>
-                  
-                  <div className="flex flex-col w-full gap-2 justify-center mt-6">
-                    <Link to={`/shortlist-ai?job_id=${job.id}`} className="w-full">
-                      <Button
-                        variant="yellow"
-                        size="lg"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-sm text-center font-medium"
-                      >
-                        Run AI Shortlisting
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
+              {loadingHiringStatus && (
+                <BarLoader width={"100%"} color="#36d7b7" />
               )}
+
+              {/* Applications section for recruiters */}
+              {job?.applications?.length > 0 &&
+                job?.recruiter_id === user?.id && (
+                  <div className="bg-white rounded-lg shadow-sm border p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-xl font-semibold text-gray-900">
+                        Applications
+                      </h2>
+                      <span className="px-2.5 py-0.5 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                        {job?.applications?.length} total
+                      </span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {job?.applications.map((application) => {
+                        return (
+                          <ApplicationCard
+                            key={application.id}
+                            application={application}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex flex-col w-full gap-2 justify-center mt-6">
+                      <Link
+                        to={`/shortlist-ai?job_id=${job.id}`}
+                        className="w-full"
+                      >
+                        <Button
+                          variant="yellow"
+                          size="lg"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-sm text-center font-medium"
+                        >
+                          Run AI Shortlisting
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
 
           {/* Right column - Additional info */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Job Details</h2>
-              
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Job Details
+              </h2>
+
               <div className="space-y-4">
                 <div className="flex items-start">
                   <Briefcase className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
                   <div>
-                    <div className="text-sm font-medium text-gray-900">Job Type</div>
-                    <div className="text-sm text-gray-500">{job?.job_type || "Full Time"}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      Job Type
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {job?.job_type || "Full Time"}
+                    </div>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <MapPinIcon className="w-5 h-5 text-gray-400 mt-0.5 mr-3" />
                   <div>
-                    <div className="text-sm font-medium text-gray-900">Location</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      Location
+                    </div>
                     <div className="text-sm text-gray-500">{job?.location}</div>
                   </div>
                 </div>

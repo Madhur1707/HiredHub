@@ -85,7 +85,7 @@ const Header = () => {
                   <Button
                     variant="outline"
                     onClick={() => setShowSignIn(true)}
-                    className="border-blue-200 text-blue-700 hover:bg-blue-50 mr-2"
+                    className="border-blue-200 text-white hover:bg-blue-50 hover:text-blue-600 mr-2"
                   >
                     Sign In
                   </Button>

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Heart, MapPinIcon, Trash2Icon } from "lucide-react";
+import { Heart, MapPin, Trash2, Clock } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -17,14 +17,14 @@ import { useEffect, useState } from "react";
 const JobCard = ({
   job,
   isMyJob = false,
-  savedInt = false,
+  savedInit = false,
   onJobSaved = () => {},
 }) => {
-  const [saved, setSaved] = useState(savedInt);
+  const [saved, setSaved] = useState(savedInit);
   const {
     fn: fnSavedJob,
     data: savedJob,
-    loading: loaadingSavedJob,
+    loading: loadingSavedJob,
   } = useFetch(SaveJob, {
     alreadySaved: saved,
   });
@@ -46,44 +46,63 @@ const JobCard = ({
   }, [savedJob]);
 
   return (
-    <Card className="flex flex-col m-2 shadow-none transition-shadow duration-300 cursor-pointer hover:shadow-md hover:shadow-gray-400">
-      <CardHeader>
-        <CardTitle className="flex justify-between font-semibold">
+    <Card className="m-2 bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900">
           {job.title}
-          {!isMyJob && (
-            <Trash2Icon
-              fill="red"
+          {isMyJob && (
+            <Trash2
               size={18}
-              className="text-red-300 cursor-pointer"
+              className="text-red-500 cursor-pointer hover:text-red-700"
             />
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
-        <div className="flex justify-between">
-          {job.company && (
-            <img src={job.company.logo_url} alt="Company" className="h-6" />
-          )}
-          <div className=" flex gap-2 items-center">
-            <MapPinIcon size={15} />
-            {job.location}{" "}
+
+      <CardContent className="pb-4">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center bg-black p-1">
+            {job.company && (
+              <img
+                src={job.company.logo_url}
+                alt="Company"
+                className="h-6 w-auto object-contain"
+              />
+            )}
+          </div>
+          <div className="flex items-center text-gray-600 text-sm">
+            <MapPin size={15} className="mr-1" />
+            {job.location}
           </div>
         </div>
 
-        <p className=" text-sm">{job.description.slice(0, 150)}...</p>
+        <div>
+          <p className="text-sm text-gray-600">
+            {job.description?.slice(0, 150)}...
+          </p>
+        </div>
+
+        <div className="mt-4 flex items-center text-xs text-gray-500">
+          <Clock size={14} className="mr-1" />
+          <span>Posted {Math.floor(Math.random() * 30) + 1} days ago</span>
+        </div>
       </CardContent>
-      <CardFooter className="flex gap-2">
+
+      <CardFooter className="pt-3 flex gap-2 border-t border-gray-100">
         <Link to={`/job/${job.id}`} className="flex-1">
-          <Button variant="ghost" className="w-full text-yellow-300">
+          <Button
+            variant="ghost"
+            className="w-full text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+          >
             More Details
           </Button>
         </Link>
         {!isMyJob && (
           <Button
             variant="outline"
-            className="w-15"
+            className="border-gray-200"
             onClick={handleSaveJob}
-            disabled={loaadingSavedJob}
+            disabled={loadingSavedJob}
           >
             {saved ? (
               <Heart size={20} stroke="red" fill="red" />
