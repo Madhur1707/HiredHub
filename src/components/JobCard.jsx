@@ -61,7 +61,7 @@ const JobCard = ({
 
       <CardContent className="pb-4">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center bg-black p-1">
+          <div className="flex items-center bg-black p-2 rounded-sm">
             {job.company && (
               <img
                 src={job.company.logo_url}

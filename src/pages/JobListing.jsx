@@ -24,7 +24,14 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from "@/components/ui/pagination";
-import { Briefcase, MapPin, Building, Search, X } from "lucide-react";
+import {
+  Briefcase,
+  MapPin,
+  Building,
+  Search,
+  Filter,
+  Trash,
+} from "lucide-react";
 
 const cities = ["Hyderabad", "Noida", "Gurgaon", "Bengaluru", "Pune"];
 
@@ -33,6 +40,7 @@ const JobListing = () => {
   const [location, setLocation] = useState("");
   const [company_id, setCompany_id] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
   const jobsPerPage = 10;
 
   const { isLoaded } = useUser();
@@ -102,9 +110,79 @@ const JobListing = () => {
     );
   }
 
+  const FiltersComponent = () => (
+    <div className="space-y-6">
+      <h2 className="text-lg font-medium text-gray-900 mb-4">Filter Jobs</h2>
+
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700 flex items-center">
+            <MapPin className="w-4 h-4 mr-1 text-gray-400" />
+            Location
+          </label>
+          <Select
+            value={location}
+            onValueChange={(value) => setLocation(value)}
+          >
+            <SelectTrigger className="border-gray-200 w-full bg-white text-gray-900">
+              <SelectValue placeholder="Select City" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {cities.map((city) => (
+                  <SelectItem key={city} value={city}>
+                    {city}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-700 flex items-center">
+            <Building className="w-4 h-4 mr-1 text-gray-400" />
+            Company
+          </label>
+          <Select
+            value={company_id}
+            onValueChange={(value) => setCompany_id(value)}
+          >
+            <SelectTrigger className="border-gray-200 bg-white text-gray-900 w-full">
+              <SelectValue placeholder="Select Company" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {companies?.length > 0 ? (
+                  companies.map(({ name, id }) => (
+                    <SelectItem key={name} value={id}>
+                      {name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <div className="px-4 py-2">No companies available</div>
+                )}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Button
+          onClick={clearFilters}
+          variant="outline"
+          size="lg"
+          className="border-blue-200 text-white hover:bg-blue-50 hover:text-blue-700 shadow-sm w-full h-10"
+        >
+          <Trash className="w-4 h-4 mr-2" />
+          Clear Filters
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <section className="bg-white rounded-lg shadow-sm border mb-8 p-6">
           <div className="flex flex-col items-center justify-center text-center">
@@ -129,12 +207,12 @@ const JobListing = () => {
               className="w-full flex flex-col sm:flex-row gap-4 items-center"
             >
               <div className="relative w-full">
-                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-900" />
                 <Input
                   type="text"
                   name="search-query"
                   placeholder="Search Jobs by Title"
-                  className="pl-10 h-12 text-gray-800 border-gray-200"
+                  className="pl-10 h-12 text-gray-900 bg-white border-gray-200"
                 />
               </div>
               <Button
@@ -149,179 +227,135 @@ const JobListing = () => {
           </div>
         </section>
 
-        {/* Filters Section */}
-        <section className="bg-white rounded-lg shadow-sm border mb-8 p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Filter Jobs
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center">
-                <MapPin className="w-4 h-4 mr-1 text-gray-400" />
-                Location
-              </label>
-              <Select
-                value={location}
-                onValueChange={(value) => setLocation(value)}
-              >
-                <SelectTrigger className="border-gray-200">
-                  <SelectValue placeholder="Select City" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {cities.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 flex items-center">
-                <Building className="w-4 h-4 mr-1 text-gray-400" />
-                Company
-              </label>
-              <Select
-                value={company_id}
-                onValueChange={(value) => setCompany_id(value)}
-              >
-                <SelectTrigger className="border-gray-200">
-                  <SelectValue placeholder="Select Company" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {companies?.length > 0 ? (
-                      companies.map(({ name, id }) => (
-                        <SelectItem key={name} value={id}>
-                          {name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <div className="px-4 py-2">No companies available</div>
-                    )}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex items-end">
-              <Button
-                onClick={clearFilters}
-                variant="outline"
-                className="border-gray-200 text-gray-50 hover:bg-gray-50 hover:text-black  w-full"
-              >
-                <X className="w-4 h-4 mr-2" />
-                Clear Filters
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Job Listings */}
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Available Positions
-          </h2>
-
-          {loadingJobs === false &&
-            (currentJobs?.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {currentJobs.map((job) => (
-                  <JobCard
-                    key={job.id}
-                    job={job}
-                    savedInit={job?.saved?.length > 0}
-                  />
-                ))}
-              </div>
-            ) : (
-              <Card className="border shadow-sm bg-white">
-                <CardContent className="flex flex-col items-center justify-center p-8">
-                  <Briefcase className="w-12 h-12 text-gray-300 mb-4" />
-                  <h3 className="text-xl font-medium text-gray-800">
-                    No Jobs Found
-                  </h3>
-                  <p className="text-gray-500 text-center mt-2">
-                    Try adjusting your search filters or check back later for
-                    new opportunities.
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-        </section>
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <section className="flex justify-center mb-8">
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem className="bg-black text-gray-50 rounded-sm">
-                  <PaginationPrevious
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handlePreviousPage();
-                    }}
-                    className={
-                      currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                    }
-                  />
-                </PaginationItem>
-
-                {[...Array(totalPages).keys()].map((page) => (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handlePageChange(page + 1);
-                      }}
-                      isActive={currentPage === page + 1}
-                      className={
-                        currentPage === page + 1
-                          ? "bg-blue-50  text-blue-700"
-                          : "bg-black"
-                      }
-                    >
-                      {page + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-
-                <PaginationItem className="bg-black rounded-sm">
-                  <PaginationNext
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNextPage();
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </section>
-        )}
-
-        {/* CTA Section */}
-        <section className="bg-blue-700 rounded-lg shadow-sm mb-8 p-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-3">
-            Do not See What You are Looking For?
-          </h2>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Create a job alert and we will notify you when new positions
-            matching your criteria become available.
-          </p>
+        {/* Mobile Filter Toggle Button */}
+        <div className="lg:hidden mb-4">
           <Button
-            className="bg-white text-blue-700 hover:bg-blue-50 shadow-sm"
-            size="lg"
+            onClick={() => setShowFiltersMobile(!showFiltersMobile)}
+            variant="outline"
+            className="w-full flex items-center justify-center"
           >
-            Create Job Alert
+            <Filter className="w-4 h-4 mr-2" />
+            {showFiltersMobile ? "Hide Filters" : "Show Filters"}
           </Button>
-        </section>
+        </div>
+
+        {/* Main Content with Sidebar Layout */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Filters - Left Sidebar (hidden on mobile by default) */}
+          <aside
+            className={`${
+              showFiltersMobile ? "block" : "hidden"
+            } lg:block lg:w-1/4`}
+          >
+            <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-20">
+              <FiltersComponent />
+            </div>
+          </aside>
+
+          {/* Job Listings - Right Side */}
+          <main className="lg:w-3/4">
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Available Positions
+              </h2>
+
+              {loadingJobs === false &&
+                (currentJobs?.length > 0 ? (
+                  <div className="space-y-4">
+                    {currentJobs.map((job) => (
+                      <div key={job.id} className="w-full">
+                        <JobCard job={job} savedInit={job?.saved?.length > 0} />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <Card className="border shadow-sm bg-white">
+                    <CardContent className="flex flex-col items-center justify-center p-8">
+                      <Briefcase className="w-12 h-12 text-gray-300 mb-4" />
+                      <h3 className="text-xl font-medium text-gray-800">
+                        No Jobs Found
+                      </h3>
+                      <p className="text-gray-500 text-center mt-2">
+                        Try adjusting your search filters or check back later
+                        for new opportunities.
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+            </section>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <section className="flex justify-center mb-8">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem className="bg-black text-gray-50 rounded-sm">
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePreviousPage();
+                        }}
+                        className={
+                          currentPage === 1
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+
+                    {[...Array(totalPages).keys()].map((page) => (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(page + 1);
+                          }}
+                          isActive={currentPage === page + 1}
+                          className={
+                            currentPage === page + 1
+                              ? "bg-blue-50 text-blue-700"
+                              : "bg-black"
+                          }
+                        >
+                          {page + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem className="bg-black rounded-sm">
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNextPage();
+                        }}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </section>
+            )}
+
+            {/* CTA Section */}
+            <section className="bg-blue-700 rounded-lg shadow-sm mb-8 p-8 text-center">
+              <h2 className="text-2xl font-bold text-white mb-3">
+                Do not See What You are Looking For?
+              </h2>
+              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+                Create a job alert and we will notify you when new positions
+                matching your criteria become available.
+              </p>
+              <Button
+                className="bg-white text-blue-700 hover:bg-blue-50 shadow-sm"
+                size="lg"
+              >
+                Create Job Alert
+              </Button>
+            </section>
+          </main>
+        </div>
       </div>
     </div>
   );
