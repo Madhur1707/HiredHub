@@ -114,10 +114,10 @@ const ApplicationCard = ({ application, isCandidate = false }) => {
             onValueChange={handleStatusChange}
             defaultValue={application.status}
           >
-            <SelectTrigger className="w-52 border-gray-200 text-gray-700">
+            <SelectTrigger className="w-52 border-gray-200 bg-white text-gray-700">
               <SelectValue placeholder="Application Status" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white text-gray-800">
               <SelectItem value="applied">Applied</SelectItem>
               <SelectItem value="interviewing">Interviewing</SelectItem>
               <SelectItem value="hired">Hired</SelectItem>
