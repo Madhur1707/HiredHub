@@ -131,9 +131,8 @@ const AddCompanyDrawer = ({ fetchCompanies }) => {
                 </Button>
                 <DrawerClose asChild>
                   <Button
-                    variant="outline"
                     type="button"
-                    className="border-gray-200 text-gray-50 hover:bg-gray-50 hover:text-black shadow-sm flex-1 h-12"
+                    className="border-gray-200 text-gray-50 hover:bg-red-700 hover:text-white shadow-sm flex-1 h-12"
                   >
                     Cancel
                   </Button>
