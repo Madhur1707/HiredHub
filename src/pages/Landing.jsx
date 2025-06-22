@@ -15,16 +15,65 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Briefcase, DoorOpen, MapPin, Users, ChevronRight } from "lucide-react";
+import {
+  Briefcase,
+  DoorOpen,
+  MapPin,
+  Users,
+  ChevronRight,
+  Clock,
+} from "lucide-react";
 import { SignedOut } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
 
 const LandingPage = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const currentTime = setInterval(() => {
+      setTime(new Date());
+    }, 1000); // Update every second
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(currentTime);
+  }, []);
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        {/* Hero section */}
+        {/* Hero section with integrated clock */}
         <section className="bg-white rounded-lg shadow-sm border mb-8 p-6">
           <div className="flex flex-col items-center justify-center text-center">
+            {/* Live Clock Integration */}
+            <div className="flex items-center justify-center mb-4 bg-gray-50 rounded-lg px-4 py-2 border">
+              <Clock className="w-4 h-4 text-blue-600 mr-2" />
+              <div className="text-sm font-medium text-gray-700">
+                <span className="font-mono text-blue-600 mr-2">
+                  {formatTime(time)}
+                </span>
+                <span className="text-gray-500">|</span>
+                <span className="ml-2 text-gray-600">{formatDate(time)}</span>
+              </div>
+            </div>
+
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
               Elevate Your Career
               <span className="block text-blue-600">
@@ -50,7 +99,7 @@ const LandingPage = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-blue-200 text-white hover:bg-blue-50 hover:text-blue-700 shadow-sm"
+                  className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 shadow-sm"
                 >
                   <DoorOpen className="w-4 h-4 mr-2" />
                   Post a Job
